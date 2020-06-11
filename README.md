@@ -10,6 +10,7 @@ The data can be downloaded from [Kaggle](https://www.kaggle.com/nih-chest-xrays/
 1. Install Anaconda if you don't have it already
 2. Run `conda env create -f environment.yml`
 3. Then run `conda activate medical`
+This installs python 3.8, numpy, pandas, scikit-learn, matplotlib, tensorflow-gpu and keras among other dependencies.
 
 ## Files
 The main files (with explanatory names) are
@@ -18,3 +19,4 @@ The main files (with explanatory names) are
 - Inference.ipynb
 
 dcm files are specialized medical files containing an image and metadata. They are used to test clinical workflow.
+

@@ -29,7 +29,7 @@ Similarly, if it says there's no pneumonia, with what probability is that true?
 Note: tn=true neg, tp=true pos, fn=false neg, fp=false pos.
 
 The first metric is called precision, and it is equal to "number of true positive / number of cases we think are positive = tp / (tp + fp)".
-For model 1 and threshold=0.39: precision = 19/(19+38)=0.33.»»»»»»»»»»»»»»»»
+For model 1 and threshold=0.39: precision = 19/(19+38)=0.33.
 For model 2 and threshold=0.37: precision = 18/(18+43)=0.29
 
 The second metric is known as the negative predictive value and is calculated as "number of true negative / number of cases we think are negative = tn / (tn + fn)"
@@ -38,7 +38,7 @@ For model 2: npv = 57/(57+10)=0.85
 
 Another key metric is recall: among the positive cases in the data (tp & fn), how  many are identified as positive?
 Model 1 recall = tp/(tp+fn) = 19/(19+9)=0.68
-Model 2 recall »=0.64
+Model 2 recall =0.64
 
 So, model 1 has slightly better metrics.
 
@@ -51,7 +51,7 @@ Both models are VGG 16 pretrained networks but #1 has its last convolutional lay
 Since the first model had better performance, it will be described below.
 
 << Insert Algorithm Flowchart >>
-![algorithm flowchart]('algorithm_flowchart.png')
+![algorithm flowchart](algorithm_flowchart.png)
 
 **DICOM Checking Steps:**
 1. Check modality is an X-Ray scan (DX)
@@ -64,20 +64,20 @@ Since the first model had better performance, it will be described below.
 3. pass the image through the keras preprocess function for VGG16 networks. It converts RGB to BGR, each channel is zero centered with respect to ImageNet, with no scaling.
 
 **CNN Architecture:**
-![cnn architecture]('model_plot.png')
+![cnn architecture](model_plot.png)
 
 ### 3. Algorithm Training
 
 **Parameters:**
 * Types of augmentation used during training: 
-1. rescale pixels to [0,1]
-2. horizontal flip
-3. height shift range: 0.1
-4. width shift range: 0.1
-5. rotation range: 10
-6. shear range: 0.1
-7. zoom range: 0.1
-8. vgg16.preprocess_input()
+- rescale pixels to [0,1]
+- horizontal flip
+- height shift range: 0.1
+- width shift range: 0.1
+- rotation range: 10
+- shear range: 0.1
+- zoom range: 0.1
+- vgg16.preprocess_input()
 * Batch size: 32
 * Optimizer learning rate: 0.00001
 * Layers of pre-existing architecture that were frozen: all layers of VGG16, except the very last convolutional layer
@@ -85,12 +85,13 @@ Since the first model had better performance, it will be described below.
 * Layers added to pre-existing architecture: flatten, dropout 0.4, dense 512, dropout 0.4, dense 256, dropout 0.4, dense 1.
 
 Algorithm training performance visualization
-![model training history](model1_history.png)
+![model training history](model_training_history.png)
 
 P-R curve
-![pr curve](model1_pr.png)
+![pr curve](model_pr.png)
 
 **Final Threshold and Explanation:**
+
 The final threshold was 0.39. This struck a good balance between F1, precision, and recall as seen below:
 ![stats_curve_thresholds](f1pr_vs_threshold.png)
 
@@ -100,7 +101,6 @@ At a threshold of 0.39, the NPV is at its maximum.
 
 
 ### 4. Databases
- (For the below, include visualizations as they are useful and relevant)
 
 **Description of Training Dataset:** 
 The training set contains a 50-50 positive-negative split of pneumonia cases with 2290 images.
@@ -111,7 +111,9 @@ The validation set contains a 20-80 positive-negative split of pneumonia cases w
 ### 5. Ground Truth
 From the [Kaggle data source](https://www.kaggle.com/nih-chest-xrays/data):
 ```
-This NIH Chest X-ray Dataset is comprised of 112,120 X-ray images with disease labels from 30,805 unique patients. To create these labels, the authors used Natural Language Processing to text-mine disease classifications from the associated radiological reports. The labels are expected to be >90% accurate and suitable for weakly-supervised learning.
+This NIH Chest X-ray Dataset is comprised of 112,120 X-ray images with disease labels from 30,805 unique patients.
+To create these labels, the authors used Natural Language Processing to text-mine disease classifications from the 
+associated radiological reports. The labels are expected to be >90% accurate and suitable for weakly-supervised learning.
 ```
 
 Disease labels include: atelectasis, consolidation, infiltration, pneumothorax, edema, emphysema, fibrosis, effusion, pneumonia, pleural thickening, cardiomegaly, nodule, mass, and hernia.

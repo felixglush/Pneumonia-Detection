@@ -13,7 +13,7 @@
 **Indications for Use:**
 Screening X-Rays for pneumonia.
 Ages: 1-95
-Ages 25th to 75th quantiles: 35-60.
+Ages 25th to 75th quantiles: 35-59.
 Gender: Men and Women
 X-Ray properties: 
 - position (AP/PA)
@@ -105,12 +105,21 @@ At a threshold of 0.39, the NPV is at its maximum.
 
 
 ### 4. Databases
+The dataset is 112120 images. A training and validation dataset were created from it by random sampling. 
+The prevalence of pneumonia in this set is 1.3%. 
+The minimum and maximum ages are 1 and 95, respectively. There were some outliers (ages that clearly don't make sense) that were filtered out. 
+The majority of ages are between 20 and 60, however. In fact, the 25th and 75th percentiles are 35 and 59.
+Those with pneumonia are most often between 20 and 70, and 837 out of 1431 pneumonia-positive cases are males - that is slightly more than half.
+However, the overall dataset consists of more male xrays than female xrays with 63328 out of 112120, or 56%, being male.
 
 **Description of Training Dataset:** 
-The training set contains a 50-50 positive-negative split of pneumonia cases with 2290 images.
+The training set contains a 50-50 positive-negative split of pneumonia cases with 2290 images in total. 
+This was created by selecting by first splitting the Pneumonia cases into 80-20 train-validation sets. 
+Then for the train set, a random sample of positive-for-pneumonia quantity of negative-for-pneumonia cases were selected and thrown out, thus creating a 50-50 training set split.
 
 **Description of Validation Dataset:** 
 The validation set contains a 20-80 positive-negative split of pneumonia cases with 1430 images.
+This was created by randomly choosing negative-for-pneumonia cases that were 4 times larger in number than the positive-for-pneumonia cases.
 
 ### 5. Ground Truth
 From the [Kaggle data source](https://www.kaggle.com/nih-chest-xrays/data):
@@ -120,12 +129,17 @@ To create these labels, the authors used Natural Language Processing to text-min
 associated radiological reports. The labels are expected to be >90% accurate and suitable for weakly-supervised learning.
 ```
 
+This means the labels are mostly accurate for training. However, a more accurate alternative would be to have 3 radiologists verify the diagnoses and label the images, possibly weighted by years of experience.
+This would be a very lengthy and costly procedure for 112,120 images. Given the training required, one cannot simply crowdsource the labels like one can for common objects such as those found in ImageNet.
+Thus, if the NLP approach is 90% accurate, it is likely a good compromise.
+
 Disease labels include: atelectasis, consolidation, infiltration, pneumothorax, edema, emphysema, fibrosis, effusion, pneumonia, pleural thickening, cardiomegaly, nodule, mass, and hernia.
 
 ### 6. FDA Validation Plan
 
 **Patient Population Description for FDA Validation Dataset:**
-Men and women, aged 2 to 95, whose chest was scanned with an x-ray machine in the PA/AP positions. Those patients with consolidation, nodule, or infiltration might be viewed as pneumonia positive by the algorithm since the pixel intensity distributions are similar.
+Men and women, aged 1 to 95, whose chest was scanned with an x-ray machine in the PA/AP positions. Those patients with consolidation, nodule, or infiltration might be viewed as pneumonia positive by the algorithm since the pixel intensity distributions are similar.
+The validation data set should contain a 20% prevalence of pneumonia.
 
 **Ground Truth Acquisition Methodology:**
 An optimal ground truth can be obtained via a sputum test (phlegm from a deep cough), pleural fuild culture test (fluid sample from the space between the tissues lining the lungs and chest cavity), or a bronchoscopy (tube with camera inserted into windpipe, with optional biopsy). 
